@@ -35,8 +35,7 @@ export function replaceScript(html: string, scriptFilename: string, scriptCode: 
 export function replaceCss(html: string, scriptFilename: string, scriptCode: string): string {
 	const reStyle = new RegExp(`<link([^>]*?) href="[./]*${scriptFilename}"([^>]*?)>`)
 	const legacyCharSetDeclaration = /@charset "UTF-8";/
-	const inlined = html.replace(reStyle, (_, beforeSrc, afterSrc) => `<style${beforeSrc}${afterSrc}>${scriptCode.replace(legacyCharSetDeclaration, "")}</style>`);
-	return inlined
+	return html.replace(reStyle, () => `<style rel="stylesheet">${scriptCode.replace(legacyCharSetDeclaration, "")}</style>`);
 }
 
 const isJsFile = /\.[mc]?js$/
@@ -99,7 +98,6 @@ export function viteSingleFile({
 						continue
 					}
 					const cssChunk = bundle[filename] as OutputAsset
-					console.debug(`Inlining: ${filename}`)
 					bundlesToDelete.push(filename)
 					replacedHtml = replaceCss(replacedHtml, cssChunk.fileName, cssChunk.source as string)
 				}
