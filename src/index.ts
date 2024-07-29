@@ -35,7 +35,7 @@ export function replaceScript(html: string, scriptFilename: string, scriptCode: 
 export function replaceCss(html: string, scriptFilename: string, scriptCode: string): string {
 	const reStyle = new RegExp(`<link([^>]*?) href="[./]*${scriptFilename}"([^>]*?)>`)
 	const legacyCharSetDeclaration = /@charset "UTF-8";/
-	return html.replace(reStyle, () => `<style rel="stylesheet">${scriptCode.replace(legacyCharSetDeclaration, "")}</style>`);
+	return html.replace(reStyle, () => `<style rel="stylesheet">${scriptCode.replace(legacyCharSetDeclaration, "").replace(/\n$/, '')}</style>`);
 }
 
 const isJsFile = /\.[mc]?js$/
